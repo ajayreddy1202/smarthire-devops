@@ -19,14 +19,17 @@ jobs:
 
     - name: Install Dependencies
       run: |
+        cd SmartHire
         pip install -r requirements.txt
 
     - name: Run Django Check
       run: |
+        cd SmartHire
         python manage.py check
 
     - name: Build Docker Image
       run: |
+        cd SmartHire
         docker build -t smarthire:latest .
 
     - name: Success Message
