@@ -1,0 +1,109 @@
+{% extends "tracker/base.html" %}
+
+{% block content %}
+
+<!-- HEADER -->
+<div style="margin-bottom:30px;">
+    <h1 style="font-size:1.8rem; font-weight:700;">
+        Hello 👋
+    </h1>
+    <p style="color:#aaa;">Here's your job search overview</p>
+</div>
+
+<!-- STAT CARDS -->
+<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:16px; margin-bottom:30px;">
+    
+    <div style="padding:20px;border:1px solid #444;border-radius:12px;">
+        <p style="color:#aaa;font-size:12px;">Total Applied</p>
+        <h2>{{ total }}</h2>
+    </div>
+
+    <div style="padding:20px;border:1px solid #444;border-radius:12px;">
+        <p style="color:#aaa;font-size:12px;">Interviews</p>
+        <h2>{{ interviews }}</h2>
+    </div>
+
+    <div style="padding:20px;border:1px solid #444;border-radius:12px;">
+        <p style="color:#aaa;font-size:12px;">Offers</p>
+        <h2>{{ offers }}</h2>
+    </div>
+
+    <div style="padding:20px;border:1px solid #444;border-radius:12px;">
+        <p style="color:#aaa;font-size:12px;">Rejected</p>
+        <h2>{{ rejected }}</h2>
+    </div>
+
+</div>
+
+<!-- CHART + RECENT JOBS -->
+<div style="display:grid; grid-template-columns:300px 1fr; gap:24px;">
+
+    <!-- PIE CHART -->
+    <div style="padding:20px;border:1px solid #444;border-radius:12px;">
+        <h3>Application Status</h3>
+        <canvas id="statusChart" width="250" height="250"></canvas>
+    </div>
+
+    <!-- RECENT JOBS -->
+    <div style="padding:20px;border:1px solid #444;border-radius:12px;">
+        <h3>Recent Applications</h3>
+
+        {% if jobs %}
+        <table style="width:100%; margin-top:10px;">
+            <thead>
+                <tr>
+                    <th align="left">Company</th>
+                    <th align="left">Role</th>
+                    <th align="left">Status</th>
+                    <th align="left">Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for job in jobs %}
+                <tr>
+                    <td>{{ job.company_name }}</td>
+                    <td>{{ job.job_title }}</td>
+                    <td>{{ job.get_status_display }}</td>
+                    <td>{{ job.applied_date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% else %}
+        <p>No jobs added yet</p>
+        {% endif %}
+    </div>
+
+</div>
+
+<!-- CHART.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+
+<script>
+const labels = JSON.parse('{{ chart_labels|escapejs }}');
+const values = JSON.parse('{{ chart_values|escapejs }}');
+
+if(labels.length > 0){
+const ctx = document.getElementById('statusChart').getContext('2d');
+
+new Chart(ctx,{
+type:'doughnut',
+data:{
+labels:labels,
+datasets:[{
+data:values,
+backgroundColor:[
+'#6C63FF',
+'#FFB347',
+'#43D787',
+'#FF6B6B'
+]
+}]
+}
+});
+}
+</script>
+
+{% endblock %}

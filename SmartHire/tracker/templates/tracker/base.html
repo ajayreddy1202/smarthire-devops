@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartHire - Job Tracker</title>
+    <style>
+        /* ─── CSS RESET & VARIABLES ─── */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #6C63FF;
+            --secondary: #FF6584;
+            --success: #43D787;
+            --warning: #FFB347;
+            --danger: #FF6B6B;
+            --dark: #1A1A2E;
+            --card: #16213E;
+            --text: #E0E0E0;
+            --muted: #888;
+            --border: rgba(108, 99, 255, 0.3);
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ─── NAVBAR ─── */
+        nav {
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 0 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 65px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span { color: var(--secondary); }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        nav a:hover { background: var(--border); color: var(--primary); }
+
+        .btn-nav {
+            background: var(--primary);
+            color: white !important;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .btn-nav:hover { background: #5a52d5 !important; }
+
+        /* ─── MAIN CONTENT ─── */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* ─── BUTTONS ─── */
+        .btn {
+            display: inline-block;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: #5a52d5; transform: translateY(-1px); }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-danger:hover { background: #e05555; }
+        .btn-success { background: var(--success); color: #111; }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* ─── CARDS ─── */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        /* ─── ALERTS (Django messages) ─── */
+        .alert {
+            padding: 14px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .alert-success { background: rgba(67,215,135,0.15); border: 1px solid var(--success); color: var(--success); }
+        .alert-error { background: rgba(255,107,107,0.15); border: 1px solid var(--danger); color: var(--danger); }
+
+        /* ─── FORMS ─── */
+        .form-group { margin-bottom: 18px; }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            background: var(--dark);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* ─── STATUS BADGES ─── */
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .badge-applied { background: rgba(108,99,255,0.2); color: var(--primary); }
+        .badge-interview { background: rgba(255,179,71,0.2); color: var(--warning); }
+        .badge-offer { background: rgba(67,215,135,0.2); color: var(--success); }
+        .badge-rejected { background: rgba(255,107,107,0.2); color: var(--danger); }
+        .badge-withdrawn { background: rgba(136,136,136,0.2); color: var(--muted); }
+
+        /* ─── TABLE ─── */
+        table { width: 100%; border-collapse: collapse; }
+        th {
+            text-align: left;
+            padding: 12px 16px;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            color: var(--muted);
+            border-bottom: 1px solid var(--border);
+        }
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.9rem;
+        }
+        tr:hover td { background: rgba(108,99,255,0.05); }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/dashboard/" class="logo">Smart<span>Hire</span></a>
+    {% if user.is_authenticated %}
+    <ul>
+        <li><a href="/dashboard/">📊 Dashboard</a></li>
+        <li><a href="/jobs/">📋 My Jobs</a></li>
+        <li><a href="/jobs/add/" class="btn-nav">+ Add Job</a></li>
+        <li><a href="/logout/">Logout ({{ user.username }})</a></li>
+    </ul>
+    {% else %}
+    <ul>
+        <li><a href="/login/">Login</a></li>
+        <li><a href="/register/" class="btn-nav">Sign Up Free</a></li>
+    </ul>
+    {% endif %}
+</nav>
+
+<div class="container">
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+    
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

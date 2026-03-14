@@ -1,0 +1,58 @@
+{% extends 'tracker/base.html' %}
+
+{% block content %}
+
+<div style="max-width:600px; margin:0 auto;">
+    <h1 style="font-size:1.6rem; font-weight:700; margin-bottom:24px;">
+        {% if edit %}✏️ Edit Application{% else %}➕ Add New Application{% endif %}
+    </h1>
+
+    <div class="card">
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                <div class="form-group">
+                    <label>Company Name *</label>
+                    {{ form.company_name }}
+                </div>
+                <div class="form-group">
+                    <label>Job Title *</label>
+                    {{ form.job_title }}
+                </div>
+                <div class="form-group">
+                    <label>Location</label>
+                    {{ form.location }}
+                </div>
+                <div class="form-group">
+                    <label>Expected Salary</label>
+                    {{ form.salary }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Application Status *</label>
+                {{ form.status }}
+            </div>
+
+            <div class="form-group">
+                <label>Job URL / Link</label>
+                {{ form.job_url }}
+            </div>
+
+            <div class="form-group">
+                <label>Notes (Interview prep, HR name, etc.)</label>
+                {{ form.notes }}
+            </div>
+
+            <div style="display:flex; gap:12px; margin-top:8px;">
+                <button type="submit" class="btn btn-primary">
+                    {% if edit %}Update Application{% else %}Save Application 🚀{% endif %}
+                </button>
+                <a href="/jobs/" class="btn btn-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
