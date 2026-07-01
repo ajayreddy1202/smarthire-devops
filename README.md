@@ -3,7 +3,7 @@
 A full-stack job tracking application built with Python Django, Docker, and AWS.
 
 ## 🌐 Live Demo
-http://13.233.71.162:8000
+http://13.233.71.162
 
 ## 🛠️ Tech Stack
 - **Backend:** Python, Django, Django REST Framework
